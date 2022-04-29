@@ -9,17 +9,23 @@ export const WhatIsInput: React.FC<WhatIsInputProps> = ({
     whatIs,
     onChangeWhatIs,
 }) => {
-    const [errMessage, setErrMessage] = useState<string>("");
+    const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const ValidateInput = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value !== "four") setErrMessage("Error: Try Again");
-        else setErrMessage("");
-        onChangeWhatIs(e);
+    const validateInput: (value: string) => string | undefined = (value) => {
+        if (value !== "four") return "Error: Try Again";
     };
     return (
         <>
             <label htmlFor="whatIs">What is 2 + 2 : </label>
-            <select value={whatIs} onChange={ValidateInput} required>
+            <select
+                value={whatIs}
+                onChange={(e) => {
+                    const errorMessage = validateInput(e.target.value);
+                    setErrMessage(errorMessage);
+                    onChangeWhatIs(e);
+                }}
+                required
+            >
                 <option value=""></option>
                 <option value="four">4</option>
                 <option value="notFour">Not 4</option>

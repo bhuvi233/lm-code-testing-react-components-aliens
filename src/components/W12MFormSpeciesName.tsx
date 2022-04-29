@@ -9,20 +9,12 @@ export const SpeciesNameInput: React.FC<SpeciesNameInputProps> = ({
     speciesName,
     onChangeSpeciesName,
 }) => {
-    const [errMessage, setErrMessage] = useState<string>("");
+    const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const validateText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const reg = /^[a-zA-Z]*$/i;
-        if (
-            !reg.test(e.target.value) ||
-            e.target.value.length < 4 ||
-            e.target.value.length > 15
-        )
-            setErrMessage(
-                "Error: Only alphabets [a-z] of size [5-15] characters"
-            );
-        else setErrMessage("");
-        onChangeSpeciesName(e);
+    const validateText: (value: string) => string | undefined = (value) => {
+        const reg = /^[a-zA-Z]{3,23}$/;
+        if (!reg.test(value))
+            return "Error: Only alphabets [a-z] of size [3-23] characters";
     };
 
     return (
@@ -32,7 +24,11 @@ export const SpeciesNameInput: React.FC<SpeciesNameInputProps> = ({
                 id="speciesName"
                 type="text"
                 value={speciesName}
-                onChange={validateText}
+                onChange={(e) => {
+                    const errorMessage = validateText(e.target.value);
+                    setErrMessage(errorMessage);
+                    onChangeSpeciesName(e);
+                }}
                 required
             />
             <div>{errMessage}</div>

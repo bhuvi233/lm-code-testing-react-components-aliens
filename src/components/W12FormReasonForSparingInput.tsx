@@ -11,22 +11,25 @@ export const ReasonForSparingInput: React.FC<ReasonForSparingInputProps> = ({
     reasonForSparing,
     onChangeReasonForSparing,
 }) => {
-    const [errMessage, setErrMessage] = useState<string>("");
+    const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const validateText = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        if (e.target.value.length > 100)
-            setErrMessage("Error: Max 100 characters");
-        else setErrMessage("");
-        onChangeReasonForSparing(e);
+    const validateText: (value: string) => string | undefined = (value) => {
+        const reg = /^.{17,153}$/;
+        if (!reg.test(value))
+            return "Error: Must be between 17 and 153 characters";
     };
     return (
         <>
             <label htmlFor="reasonForSparing">Reason for sparing: </label>
             <textarea
                 id="reasonForSparing"
-                placeholder="Characters count 20-100"
+                placeholder="Characters count 17-153"
                 value={reasonForSparing}
-                onChange={validateText}
+                onChange={(e) => {
+                    const errorMessage = validateText(e.target.value);
+                    setErrMessage(errorMessage);
+                    onChangeReasonForSparing(e);
+                }}
                 required
             />
             <div>{errMessage}</div>

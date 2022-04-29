@@ -9,14 +9,11 @@ export const NumberOfBeingsInput: React.FC<NumberOfBeingsInputProps> = ({
     numberOfBeings,
     onChangeNumberofBeings,
 }) => {
-    const [errMessage, setErrMessage] = useState<string>("");
+    const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const validateText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const reg = /^\d*$/i;
-        if (!reg.test(e.target.value))
-            setErrMessage("Error: Text should contain only numbers 0-9");
-        else setErrMessage("");
-        onChangeNumberofBeings(e);
+    const validateText: (value: string) => string | undefined = (value) => {
+        const reg = /^[1-9]{1}[0-9]{9,}$/;
+        if (!reg.test(value)) return "Error: Miinimum of 1000000000";
     };
     return (
         <>
@@ -25,7 +22,11 @@ export const NumberOfBeingsInput: React.FC<NumberOfBeingsInputProps> = ({
                 id="numberOfBeings"
                 type="text"
                 value={numberOfBeings}
-                onChange={validateText}
+                onChange={(e) => {
+                    const errorMessage = validateText(e.target.value);
+                    setErrMessage(errorMessage);
+                    onChangeNumberofBeings(e);
+                }}
                 required
             />
             <div>{errMessage}</div>

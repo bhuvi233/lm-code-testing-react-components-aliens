@@ -9,20 +9,12 @@ export const PlanetNameInput: React.FC<PlanetNameInputProps> = ({
     planetName,
     onChangePlanetName,
 }) => {
-    const [errMessage, setErrMessage] = useState<string>("");
+    const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const validateText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const reg = /^[a-zA-Z]*$/i;
-        if (
-            !reg.test(e.target.value) ||
-            e.target.value.length < 4 ||
-            e.target.value.length > 15
-        )
-            setErrMessage(
-                "Error: Only alphabets [a-z] of size [5-15] characters"
-            );
-        else setErrMessage("");
-        onChangePlanetName(e);
+    const validateText: (value: string) => string | undefined = (value) => {
+        const reg = /^[a-zA-Z0-9]{2,29}$/i;
+        if (!reg.test(value))
+            return "Error: Only alphanumeric [a-z][0-9] of size [2-29] characters";
     };
     return (
         <>
@@ -31,7 +23,11 @@ export const PlanetNameInput: React.FC<PlanetNameInputProps> = ({
                 id="planetName"
                 type="text"
                 value={planetName}
-                onChange={validateText}
+                onChange={(e) => {
+                    const errorMessage = validateText(e.target.value);
+                    setErrMessage(errorMessage);
+                    onChangePlanetName(e);
+                }}
                 required
             />
             <div>{errMessage}</div>
