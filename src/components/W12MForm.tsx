@@ -28,45 +28,45 @@ const W12MForm = () => {
         <section className="w12MForm">
             <W12MHeader />
             <form onSubmit={handleSubmitForm}>
-                <p>
+                <section>
                     <SpeciesNameInput
                         speciesName={speciesName}
                         onChangeSpeciesName={(e) =>
                             setSpeciesName(e.target.value)
                         }
                     />
-                </p>
-                <p>
+                </section>
+                <section>
                     <PlanetNameInput
                         planetName={planetName}
                         onChangePlanetName={(e) =>
                             setPlanetName(e.target.value)
                         }
                     />
-                </p>
-                <p>
+                </section>
+                <section>
                     <NumberOfBeingsInput
                         numberOfBeings={numberOfBeings}
                         onChangeNumberofBeings={(e) =>
                             setNumberOfBeings(e.target.value)
                         }
                     />
-                </p>
-                <p>
+                </section>
+                <section>
                     <WhatIsInput
                         whatIs={whatIsOutput}
                         onChangeWhatIs={(e) => setWhatIsOutput(e.target.value)}
                     />
-                </p>
-                <p>
+                </section>
+                <section>
                     <ReasonForSparingInput
                         reasonForSparing={reasonForSparing}
                         onChangeReasonForSparing={(e) =>
                             setReasonForSparing(e.target.value)
                         }
                     />
-                </p>
-                <button type="submit" value="submit">
+                </section>
+                <button type="submit" id="submit">
                     Submit Form
                 </button>
             </form>

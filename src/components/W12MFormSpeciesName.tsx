@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-interface SpeciesNameInputProps {
+export interface SpeciesNameInputProps {
     speciesName: string;
     onChangeSpeciesName: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -11,10 +11,14 @@ export const SpeciesNameInput: React.FC<SpeciesNameInputProps> = ({
 }) => {
     const [errMessage, setErrMessage] = useState<string | undefined>("");
 
-    const validateText: (value: string) => string | undefined = (value) => {
+    const validateText = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onChangeSpeciesName(e);
         const reg = /^[a-zA-Z]{3,23}$/;
-        if (!reg.test(value))
-            return "Error: Only alphabets [a-z] of size [3-23] characters";
+        if (!reg.test(e.target.value))
+            setErrMessage(
+                "Error: Only alphabets [a-z] of size [3-23] characters"
+            );
+        else setErrMessage("");
     };
 
     return (
@@ -23,12 +27,9 @@ export const SpeciesNameInput: React.FC<SpeciesNameInputProps> = ({
             <input
                 id="speciesName"
                 type="text"
+                placeholder="Enter Species Name"
                 value={speciesName}
-                onChange={(e) => {
-                    const errorMessage = validateText(e.target.value);
-                    setErrMessage(errorMessage);
-                    onChangeSpeciesName(e);
-                }}
+                onChange={validateText}
                 required
             />
             <div>{errMessage}</div>
