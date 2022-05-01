@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 
 interface NumberOfBeingsInputProps {
-    numberOfBeings: string;
+    numberOfBeings?: string;
     onChangeNumberofBeings: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
