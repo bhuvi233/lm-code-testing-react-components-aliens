@@ -4,9 +4,13 @@ import { PlanetNameInput } from "./W12MFormPlanetNameInput";
 import W12MHeader from "./W12MHeader";
 import { NumberOfBeingsInput } from "./W12MFormNumberOfBeings";
 import { WhatIsInput } from "./W12MFormWhatIsInput";
-import { ReasonForSparingInput } from "./W12FormReasonForSparingInput";
+import { ReasonForSparingInput } from "./W12MFormReasonForSparingInput";
 
-const W12MForm = () => {
+interface formProps {
+    onSubmit: (event: FormEvent) => void;
+}
+
+const W12MForm: React.FC<formProps> = ({ onSubmit }) => {
     const [speciesName, setSpeciesName] = useState<string>("");
     const [planetName, setPlanetName] = useState<string>("");
     const [numberOfBeings, setNumberOfBeings] = useState<string>("");
@@ -23,7 +27,9 @@ const W12MForm = () => {
         setPlanetName("");
         setWhatIsOutput("");
         setReasonForSparing("");
+        onSubmit(e);
     };
+
     return (
         <section className="w12MForm">
             <W12MHeader />

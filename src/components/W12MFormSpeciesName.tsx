@@ -1,38 +1,39 @@
-import React, { useState } from "react";
+import { useState } from "react";
+//import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-export interface SpeciesNameInputProps {
-    speciesName: string;
+interface SpeciesNameProps {
+    speciesName?: string;
     onChangeSpeciesName: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const SpeciesNameInput: React.FC<SpeciesNameInputProps> = ({
+export const SpeciesNameInput: React.FC<SpeciesNameProps> = ({
     speciesName,
     onChangeSpeciesName,
 }) => {
-    const [errMessage, setErrMessage] = useState<string | undefined>("");
+    const [errorMessage, setErrorMessage] = useState<string | undefined>("");
 
-    const validateText = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChangeSpeciesName(e);
-        const reg = /^[a-zA-Z]{3,23}$/;
-        if (!reg.test(e.target.value))
-            setErrMessage(
-                "Error: Only alphabets [a-z] of size [3-23] characters"
-            );
-        else setErrMessage("");
+    const validate: (value: string) => string | undefined = (value) => {
+        const regex = /^[a-zA-Z]{3,23}$/;
+        if (regex.test(value) === false) {
+            return "Error: Only alphabets [a-z] of size [3-23] characters";
+        }
     };
 
     return (
         <>
-            <label htmlFor="speciesName">Species Name: </label>
+            <label htmlFor="speciesName">Species Name</label>
             <input
                 id="speciesName"
                 type="text"
-                placeholder="Enter Species Name"
+                placeholder="Enter a species name"
                 value={speciesName}
-                onChange={validateText}
-                required
+                onChange={(e) => {
+                    const errorMessage = validate(e.target.value);
+                    setErrorMessage(errorMessage);
+                    onChangeSpeciesName(e);
+                }}
             />
-            <div>{errMessage}</div>
+            <div>{errorMessage}</div>
         </>
     );
 };

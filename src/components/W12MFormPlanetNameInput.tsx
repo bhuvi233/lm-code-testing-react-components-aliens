@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface PlanetNameInputProps {
-    planetName: string;
+    planetName?: string;
     onChangePlanetName: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

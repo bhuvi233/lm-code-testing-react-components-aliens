@@ -1,6 +1,9 @@
-import { cleanup, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import W12MForm from "./W12MForm";
+// import { configure } from "enzyme";
+// import Adapter from "enzyme-adapter-react-16";
+// configure({ adapter: new Adapter() });
 
 afterEach(() => {
     cleanup();
@@ -8,19 +11,20 @@ afterEach(() => {
 });
 
 test("renders form element", () => {
+    const mockOnSubmit = jest.fn();
     // we can hold onto the object returned from render()
     // this object has a container property that we can destructure and inspect
-    const { container } = render(<W12MForm />);
+    const { container } = render(<W12MForm onSubmit={mockOnSubmit} />);
 
     // the container is just a normal DOM element, so we can look at normal properties like '.firstChild'
     // for example, the firstChild of our container should be our form element
-    // eslint-disable-next-line testing-library/no-node-access
     expect(container.firstChild).toHaveClass("w12MForm");
 });
 
 describe("W12MForm Tests", () => {
     test("the form should render all the fields", () => {
-        render(<W12MForm />);
+        const mockOnSubmit = jest.fn();
+        render(<W12MForm onSubmit={mockOnSubmit} />);
         expect(
             screen.getByRole("textbox", { name: /Species Name/i })
         ).toBeInTheDocument();
@@ -42,13 +46,13 @@ describe("W12MForm Tests", () => {
     });
 
     test("submit button calls handler function", async () => {
-        const handleSubmitForm = jest.fn();
+        const mockOnSubmit = jest.fn();
 
-        render(<W12MForm />);
+        render(<W12MForm onSubmit={mockOnSubmit} />);
         const submitButton = screen.getByRole("button", {
             name: /Submit Form/i,
         });
         await userEvent.click(submitButton);
-        expect(await waitFor(() => handleSubmitForm)).toHaveBeenCalledTimes(1);
+        expect(mockOnSubmit).toHaveBeenCalledTimes(1);
     });
 });

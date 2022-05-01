@@ -1,12 +1,17 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, cleanup } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { SpeciesNameInput, SpeciesNameInputProps } from "./W12MFormSpeciesName";
-import "@testing-library/jest-dom/extend-expect";
-import "@testing-library/jest-dom";
+import { SpeciesNameInput } from "./W12MFormSpeciesName";
+// import "@testing-library/jest-dom/extend-expect";
+// import "@testing-library/jest-dom";
+
+afterEach(() => {
+    cleanup();
+    jest.clearAllMocks();
+});
 
 describe("Species Name Tests", () => {
     const onChange = jest.fn();
-    const speciesNameProps: SpeciesNameInputProps = {
+    const speciesNameProps = {
         speciesName: "humans",
         onChangeSpeciesName: onChange,
     };
@@ -33,25 +38,21 @@ describe("Species Name Tests", () => {
     });
 
     test("input field passes onChange the correct parameters", async () => {
+        const mockOnChangeSpeciesName = jest.fn();
+        const speciesNameProps = {
+            onChangeSpeciesName: mockOnChangeSpeciesName,
+        };
         render(<SpeciesNameInput {...speciesNameProps} />);
-        const speciesNameTextbox =
-            screen.getByPlaceholderText(/Enter Species Name/i);
-        await userEvent.type(speciesNameTextbox, "man");
-        await waitFor(() => {
-            expect(speciesNameTextbox).toHaveValue("man");
-        });
-
-        //expect(await waitFor(() => speciesNameTextbox)).toHaveValue("man");
-        //await waitFor(() => {
-        //expect(screen.getByText("man")).toBeTruthy();
-        //});
+        const speciesNameInput: HTMLInputElement = screen.getByPlaceholderText(
+            /Enter a species name/i
+        ) as HTMLInputElement;
+        await userEvent.type(speciesNameInput, "man");
+        expect(speciesNameInput.value).toBe("man");
     });
 
     test("no error message for valid input", async () => {
         render(<SpeciesNameInput {...speciesNameProps} />);
-        const speciesNameTextbox: HTMLInputElement = screen.getByLabelText(
-            /Species Name/i
-        ) as HTMLInputElement;
+        const speciesNameTextbox = screen.getByLabelText(/Species Name/i);
         await userEvent.type(speciesNameTextbox, "birds");
         expect(
             screen.queryByText(
@@ -61,17 +62,18 @@ describe("Species Name Tests", () => {
     });
 
     test("error message should appear for invalid input", async () => {
+        const mockOnChangeSpeciesName = jest.fn();
+        const speciesNameProps = {
+            onChangeSpeciesName: mockOnChangeSpeciesName,
+        };
         render(<SpeciesNameInput {...speciesNameProps} />);
-        const speciesNameTextbox: HTMLInputElement = screen.getByLabelText(
-            /Species Name/i
-        ) as HTMLInputElement;
-        await userEvent.type(speciesNameTextbox, "b");
-        await waitFor(() => {
-            expect(
-                screen.getByText(
-                    "Error: Only alphabets [a-z] of size [3-23] characters"
-                )
-            ).toBeInTheDocument();
-        });
+        const speciesNameInput =
+            screen.getByPlaceholderText(/Enter a species name/i);
+        await userEvent.type(speciesNameInput, "d");
+        expect(
+            screen.queryByText(
+                "Error: Only alphabets [a-z] of size [3-23] characters"
+            )
+        ).toBeInTheDocument();
     });
 });
