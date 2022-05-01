@@ -38,6 +38,9 @@ describe("W12MForm Tests", () => {
             screen.getByRole("textbox", { name: /Reason for Sparing/i })
         ).toBeInTheDocument();
         expect(
+            screen.getByRole("option", { name: /^4$/i })
+        ).toBeInTheDocument();
+        expect(
             screen.getByRole("option", { name: /Not 4/i })
         ).toBeInTheDocument();
         expect(

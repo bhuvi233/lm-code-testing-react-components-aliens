@@ -7,14 +7,14 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe("Species Name Tests", () => {
+describe("Number of Beings Tests", () => {
     const onChange = jest.fn();
     const NumberOfBeingsInputProps = {
         numberOfBeings: "1000000001",
         onChangeNumberofBeings: onChange,
     };
 
-    test("Species Name label should be present", () => {
+    test("Number of Beings label should be present", () => {
         render(<NumberOfBeingsInput {...NumberOfBeingsInputProps} />);
         const numberOfBeingsTextbox =
             screen.getByLabelText(/Number of beings/i);

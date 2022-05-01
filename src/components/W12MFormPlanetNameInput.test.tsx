@@ -7,7 +7,7 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
-describe("Species Name Tests", () => {
+describe("Planet Name Tests", () => {
     const onChange = jest.fn();
     const planetNameProps = {
         planetName: "earth",
@@ -34,9 +34,8 @@ describe("Species Name Tests", () => {
     });
 
     test("input field passes onChange the correct parameters", async () => {
-        const mockOnChangeSpeciesName = jest.fn();
         const planetNameProps = {
-            onChangePlanetName: mockOnChangeSpeciesName,
+            onChangePlanetName: onChange,
         };
         render(<PlanetNameInput {...planetNameProps} />);
         const planetNameTextbox: HTMLInputElement = screen.getByLabelText(
@@ -58,9 +57,8 @@ describe("Species Name Tests", () => {
     });
 
     test("error message should appear for invalid input", async () => {
-        const mockOnChangeSpeciesName = jest.fn();
         const planetNameProps = {
-            onChangePlanetName: mockOnChangeSpeciesName,
+            onChangePlanetName: onChange,
         };
         render(<PlanetNameInput {...planetNameProps} />);
         const planetNameTextbox = screen.getByLabelText(/Planet Name/i);
